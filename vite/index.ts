@@ -4,7 +4,7 @@ import * as Module from "node:module";
 import { pathToFileURL } from 'url';
 import JSON5 from 'json5';
 
-interface Options {
+interface Config {
     modulesDir: string,
     outputPath: string
 }
@@ -80,8 +80,8 @@ const writeDataToFile = (modulesData: Record<string, Module>, outputPath: string
     });
 }
 
-export default (options: Options) => {
-    const {modulesDir, outputPath} = options;
+export default (config: Config) => {
+    const {modulesDir, outputPath} = config;
     return {
         name: 'vite-plugin-use-mock',
         handleHotUpdate: async ({file}) => {
