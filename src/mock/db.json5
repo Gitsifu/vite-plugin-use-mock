@@ -1,0 +1,31 @@
+{
+  app_data: {
+    message: 'Hello e',
+  },
+  demo_data: [
+    {
+      id: '13ee322333333',
+      name: 'John',
+      age: 304,
+    },
+    {
+      id: '2',
+      name: 'Jan333e',
+      age: 233233333332,
+    },
+    {
+      id: '3',
+      name: 'Jo3e',
+      age: 123233,
+    },
+    {
+      id: '4',
+      name: 'Jo333e',
+      age: 33123,
+    },
+  ],
+  demo_ob: {
+    name: 'Joeeehn',
+    age: 3043,
+  },
+}
