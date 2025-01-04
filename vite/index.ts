@@ -1,6 +1,5 @@
 import path from 'path'
 import fs from 'fs';
-import * as Module from "node:module";
 import { pathToFileURL } from 'url';
 import JSON5 from 'json5';
 
@@ -9,10 +8,14 @@ interface Config {
     outputPath: string
 }
 
+interface ModuleExport {
+    [key: string]: any;
+}
+
 
 const loadModules = async (modulesDir: string) => {
     // 声明一个对象用于存储导入的模块，并定义其类型
-    const modules: Record<string, Module> = {};
+    const modules: Record<string, ModuleExport> = {};
 
     try {
         const files = fs.readdirSync(modulesDir);
@@ -44,7 +47,7 @@ const loadModules = async (modulesDir: string) => {
  * @param {Object} modulesData - 原始数据对象
  * @param {string} outputPath - 相对于当前脚本文件的输出路径
  */
-const writeDataToFile = (modulesData: Record<string, Module>, outputPath: string) => {
+const writeDataToFile = (modulesData: Record<string, ModuleExport>, outputPath: string) => {
 
     // 创建一个空对象用于存储转换后的结果
     const formattedData: Record<string, any> = {};
