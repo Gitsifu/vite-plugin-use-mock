@@ -26,10 +26,9 @@ const loadModules = async (modulesDir: string) => {
                 const modulePath = path.join(modulesDir, file);
 
                 try {
-                    // 动态导入模块
                     const fileUrl = pathToFileURL(modulePath).href;
-                    // 动态导入模块
-                    modules[moduleName] = (await import(fileUrl)).default;
+                    // 动态导入模块,添加时间戳，避免缓存
+                    modules[moduleName] = (await import(fileUrl + `?t=${Date.now()}`)).default;
                 } catch (importError) {
                     console.error(`加载模块 ${moduleName} 失败:`, importError);
                 }
@@ -68,11 +67,7 @@ const writeDataToFile = (modulesData: Record<string, ModuleExport>, outputPath: 
         fs.mkdirSync(dir, { recursive: true });
     }
 
-    // 确保没有尾随逗号
     const jsonString = JSON5.stringify(formattedData, null, 2)
-        // .replace(/,\s*}/g, '}') // 去掉对象末尾的逗号
-        // .replace(/,\s*]/g, ']'); // 去掉数组末尾的逗号
-    // console.log(jsonString)
     // 将数据写入指定的文件
     fs.writeFile(outputPath, jsonString, (err) => {
         if (err) {
@@ -92,10 +87,9 @@ export default (config: Config) => {
             const normalizedFile = path.normalize(file);
             // 如果file是modulesDir下的js文件
             if(normalizedFile.endsWith('.js') && normalizedFile.startsWith(modulesDir + path.sep)){
-                console.log('normalizedFile:', normalizedFile)
+                console.log('更新文件:', normalizedFile)
                 // 读取 modulesDir 下的文件
                 const modulesData = await loadModules(modulesDir);
-                console.log('modulesData:', modulesData)
                 writeDataToFile(modulesData, outputPath)
             }
         }
