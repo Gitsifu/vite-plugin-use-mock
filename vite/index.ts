@@ -13,6 +13,10 @@ interface ModuleExport {
 }
 
 
+/**
+ * 加载指定目录下的所有 JavaScript 文件并返回一个对象
+ * @param modulesDir - 模块目录的路径
+ */
 const loadModules = async (modulesDir: string) => {
     // 声明一个对象用于存储导入的模块，并定义其类型
     const modules: Record<string, ModuleExport> = {};

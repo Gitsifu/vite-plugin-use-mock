@@ -1,5 +1,5 @@
 export default {
     data: {
-        message: 'Hello 32233'
+        message: 'Hello World'
     }
 }
