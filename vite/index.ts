@@ -16,8 +16,9 @@ interface ModuleExport {
 /**
  * 加载指定目录下的所有 JavaScript 文件并返回一个对象
  * @param modulesDir - 模块目录的路径
+ * @param fileName - 被更新的文件名
  */
-const loadModules = async (modulesDir: string) => {
+const loadModules = async (modulesDir: string, fileName: string) => {
     // 声明一个对象用于存储导入的模块，并定义其类型
     const modules: Record<string, ModuleExport> = {};
 
@@ -31,8 +32,13 @@ const loadModules = async (modulesDir: string) => {
 
                 try {
                     const fileUrl = pathToFileURL(modulePath).href;
-                    // 动态导入模块,添加时间戳，避免缓存
-                    modules[moduleName] = (await import(fileUrl + `?t=${Date.now()}`)).default;
+                    // 被更新的文件名 == 模块名
+                    if(fileName === moduleName){
+                        // 动态导入模块,添加时间戳，避免缓存
+                        modules[moduleName] = (await import(fileUrl + `?t=${Date.now()}`)).default;
+                    }else {
+                        modules[moduleName] = (await import(fileUrl)).default;
+                    }
                 } catch (importError) {
                     console.error(`加载模块 ${moduleName} 失败:`, importError);
                 }
@@ -92,8 +98,9 @@ export default (config: Config) => {
             // 如果file是modulesDir下的js文件
             if(normalizedFile.endsWith('.js') && normalizedFile.startsWith(modulesDir + path.sep)){
                 console.log('更新文件:', normalizedFile)
+                const fileName = normalizedFile.slice(modulesDir.length + 1, -3);
                 // 读取 modulesDir 下的文件
-                const modulesData = await loadModules(modulesDir);
+                const modulesData = await loadModules(modulesDir, fileName);
                 writeDataToFile(modulesData, outputPath)
             }
         }
