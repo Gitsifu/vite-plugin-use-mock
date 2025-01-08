@@ -21,6 +21,10 @@ export default {
     {
       id: '1',
       name: '测试数据'
+    },
+    {
+      id: '2',
+      name: '测试数据2'
     }
   ],
   // ...
@@ -39,4 +43,8 @@ const {
   updateMockInfo,
   deleteMockInfo
 } = useMock('modulesName')
+
+getMockInfo('data').then(res=>{
+    console.log(res)
+})
 ```
