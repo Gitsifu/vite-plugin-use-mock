@@ -31,7 +31,9 @@ export function getLocalMockInfo(resource: string, id?: string | number | undefi
     if(id){
         return apiRequest(`${resource}/${id}`, 'get');
     }else {
-        return apiRequest(`${resource}?_sort=${sort}`, 'get');
+        const params = sort ? { _sort: sort } : {};
+        const queryString = qs.stringify(params, { addQueryPrefix: true });
+        return apiRequest(`${resource}${queryString}`, 'get');
     }
 }
 
